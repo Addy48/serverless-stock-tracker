@@ -68,6 +68,12 @@ pip install -r requirements-dev.txt
 pytest -q
 ```
 
+Against a live AWS stack (after `terraform apply` and a `.env` copied from `.env.example`):
+
+```bash
+PYTHONPATH=src python3 scripts/local_invoke.py
+```
+
 ## Deploy
 
 1. Create a free Alpha Vantage key.
