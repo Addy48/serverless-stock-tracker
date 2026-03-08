@@ -30,3 +30,14 @@ def test_first_observation_alerts_if_through_band():
     item = WatchItem("AAPL", upper=200.0, lower=None)
     reason = crossed_band(_bar(205.0), item, prev_close=None)
     assert reason is not None
+
+
+def test_no_alert_when_price_within_band():
+    item = WatchItem("AAPL", upper=230.0, lower=180.0)
+    assert crossed_band(_bar(210.0), item, prev_close=205.0) is None
+
+
+def test_exact_upper_boundary_triggers():
+    item = WatchItem("AAPL", upper=200.0, lower=None)
+    reason = crossed_band(_bar(200.0), item, prev_close=199.0)
+    assert reason is not None

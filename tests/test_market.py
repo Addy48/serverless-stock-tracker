@@ -49,3 +49,9 @@ def test_error_message_raises():
     with patch("market._http_get", return_value={"Error Message": "bad symbol"}):
         with pytest.raises(MarketDataError, match="bad symbol"):
             fetch_latest_daily("ZZZZ", "demo", sleep_fn=lambda _: None)
+
+
+def test_symbol_uppercased():
+    with patch("market._http_get", return_value=_series_payload()):
+        bar = fetch_latest_daily("aapl", "demo", sleep_fn=lambda _: None)
+    assert bar.symbol == "AAPL"

@@ -1,18 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
 .venv/
 venv/
-__pycache__/
-*.pyc
-.pytest_cache/
-.mypy_cache/
+env/
+
+# Secrets — never commit
 .env
-*.zip
+terraform/terraform.tfvars
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
 terraform/.terraform/
-terraform/*.tfstate
-terraform/*.tfstate.backup
-terraform/*.tfvars
-!terraform/terraform.tfvars.example
-.DS_Store
-build/
 terraform/lambda.zip
-dist/
-*.egg-info/
+*.tfstate
+*.tfstate.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/

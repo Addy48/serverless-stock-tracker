@@ -32,3 +32,26 @@ def test_handler_writes_and_alerts(monkeypatch):
     assert body["ok"][0]["sns_message_id"] == "mid-1"
     put.assert_called_once()
     pub.assert_called_once()
+
+
+def test_handler_partial_failure_returns_207(monkeypatch):
+    monkeypatch.setenv("ALPHA_VANTAGE_API_KEY", "demo")
+    monkeypatch.setenv("TABLE_NAME", "stock_ohlc")
+    monkeypatch.setenv("SNS_TOPIC_ARN", "arn:aws:sns:us-east-1:123:alerts")
+    monkeypatch.setenv("AWS_REGION", "us-east-1")
+    monkeypatch.setenv(
+        "WATCHLIST_JSON",
+        json.dumps([{"symbol": "AAPL", "upper": 200, "lower": 100}]),
+    )
+
+    from market import MarketDataError
+
+    with patch("handler.fetch_latest_daily", side_effect=MarketDataError("rate limited")):
+        from handler import lambda_handler
+
+        resp = lambda_handler({}, None)
+
+    assert resp["statusCode"] == 207
+    body = json.loads(resp["body"])
+    assert body["errors"][0]["symbol"] == "AAPL"
+    assert "rate limited" in body["errors"][0]["error"]
