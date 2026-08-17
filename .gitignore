@@ -31,3 +31,4 @@ Thumbs.db
 .coverage
 htmlcov/
 .mypy_cache/
+scripts/backdate*.sh
